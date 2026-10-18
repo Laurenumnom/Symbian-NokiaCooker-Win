@@ -301,8 +301,9 @@ namespace Firmware
         public TLV_DateTime(BinaryReader br)
             : base(TTLVType.DateTime, br)
         {
-            // Convert Unix TimeStamp to .NET
-            UInt32 intVal = BytesUtils.BuildInt(value[3], value[2], value[1], value[0]);
+            byte[] stamp = value;
+            Array.Reverse(stamp);
+            UInt32 intVal = BitConverter.ToUInt32(stamp, 0);
             datetime = new DateTime(1970, 1, 1, 0, 0, 0, 0);
             datetime = datetime.AddSeconds(intVal);
         }
@@ -744,7 +745,7 @@ namespace Firmware
 
 #if DEBUG
         // We override only in release builds, so SmartAssembly will obfuscate the code.
-        public  string ToString()
+        public string ToString()
         {
             string attr_s = "";
             switch (attr)

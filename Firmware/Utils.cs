@@ -82,11 +82,6 @@ namespace Firmware
             return str;
         }
 
-        public static UInt32 BuildInt(byte b1, byte b2, byte b3, byte b4)
-        {
-            byte[] b = {b1, b2, b3, b4 };
-            return BitConverter.ToUInt32(b, 0);
-        }
 
         public static ushort Hi(uint b)
         {
@@ -94,17 +89,16 @@ namespace Firmware
         }
         public static ushort Lo(uint b)
         {
-            return (ushort)(b >> 16);
+            return (ushort)(b>>16);
         }
         public static UInt32 SwapBytes(UInt32 i)
         {
-            byte[] b = BitConverter.GetBytes(i);
-            byte[] c = { b[3], b[2], b[1], b[0] };
-            return BitConverter.ToUInt32(c, 0);
+            byte[] b = { (byte)(i >> 24), (byte)(i >> 16), (byte)(i >> 8), (byte)(i >> 0) };
+            return BitConverter.ToUInt32(b, 0);
         }
         public static UInt16 SwapBytes(UInt16 i)
         {
-            byte[] b = { (byte)(i >> 8), (byte)(i >> 0) };
+            byte[] b = { (byte)(i >> 8), (byte)(i) };
             return BitConverter.ToUInt16(b, 0);
         }
 

@@ -70,7 +70,6 @@ namespace Firmware
             string[] files = Directory.GetFiles(fullPath);
             foreach (string aFile in files)
             {
-                string filename = Path.GetFileName(aFile);
                 AddFile(aFile, fullDestPath);
             }
 

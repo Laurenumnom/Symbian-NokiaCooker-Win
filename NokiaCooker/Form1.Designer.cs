@@ -34,7 +34,6 @@ namespace FuzzyByte.NokiaCooker
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel5 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -58,7 +57,6 @@ namespace FuzzyByte.NokiaCooker
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.expandAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.collapseAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.label1 = new System.Windows.Forms.Label();
             this.gridFiles1 = new System.Windows.Forms.ListView();
             this.contextFileView = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.removeFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -81,16 +79,15 @@ namespace FuzzyByte.NokiaCooker
             this.openFAT = new System.Windows.Forms.OpenFileDialog();
             this.openUnkn = new System.Windows.Forms.OpenFileDialog();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolbar = new System.Windows.Forms.ToolStrip();
             this.contextToolBar = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showLargeIconsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.closeStripItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btnOpen = new System.Windows.Forms.ToolStripButton();
             this.btnSave = new System.Windows.Forms.ToolStripButton();
             this.btnExplore = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.btnDelete = new System.Windows.Forms.ToolStripButton();
             this.btnUnlockRofs = new System.Windows.Forms.ToolStripButton();
             this.btnRofs1Increase = new System.Windows.Forms.ToolStripButton();
             this.btnRepartition = new System.Windows.Forms.ToolStripButton();
@@ -139,10 +136,9 @@ namespace FuzzyByte.NokiaCooker
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel4,
             this.toolStripStatusLabel2,
-            this.toolStripStatusLabel5,
             this.toolStripStatusLabel1,
             this.toolStripStatusLabel3});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 510);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 319);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.statusStrip1.Size = new System.Drawing.Size(761, 22);
@@ -165,15 +161,6 @@ namespace FuzzyByte.NokiaCooker
             this.toolStripStatusLabel2.Size = new System.Drawing.Size(62, 17);
             this.toolStripStatusLabel2.Text = "IconHider";
             this.toolStripStatusLabel2.Click += new System.EventHandler(this.toolStripStatusLabel2_Click);
-            // 
-            // toolStripStatusLabel5
-            // 
-            this.toolStripStatusLabel5.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
-            this.toolStripStatusLabel5.IsLink = true;
-            this.toolStripStatusLabel5.Name = "toolStripStatusLabel5";
-            this.toolStripStatusLabel5.Size = new System.Drawing.Size(65, 17);
-            this.toolStripStatusLabel5.Text = "NaviFirm+";
-            this.toolStripStatusLabel5.Click += new System.EventHandler(this.toolStripStatusLabel5_Click);
             // 
             // toolStripStatusLabel1
             // 
@@ -223,7 +210,7 @@ namespace FuzzyByte.NokiaCooker
             this.openMenuItem.Image = global::FuzzyByte.NokiaCooker.Properties.Resources.Folder_open;
             this.openMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.openMenuItem.Name = "openMenuItem";
-            this.openMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.openMenuItem.Size = new System.Drawing.Size(180, 22);
             this.openMenuItem.Text = "Open";
             this.openMenuItem.Click += new System.EventHandler(this.openMenuItem_Click);
             // 
@@ -231,7 +218,7 @@ namespace FuzzyByte.NokiaCooker
             // 
             this.closeMenuItem.Enabled = false;
             this.closeMenuItem.Name = "closeMenuItem";
-            this.closeMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.closeMenuItem.Size = new System.Drawing.Size(180, 22);
             this.closeMenuItem.Text = "Close";
             this.closeMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
             // 
@@ -241,20 +228,20 @@ namespace FuzzyByte.NokiaCooker
             this.saveMenuItem.Image = global::FuzzyByte.NokiaCooker.Properties.Resources.SaveHH;
             this.saveMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.saveMenuItem.Name = "saveMenuItem";
-            this.saveMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.saveMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveMenuItem.Text = "Save";
             this.saveMenuItem.Click += new System.EventHandler(this.saveMenuItem_Click);
             // 
             // recentFilesToolStripMenuItem
             // 
             this.recentFilesToolStripMenuItem.Name = "recentFilesToolStripMenuItem";
-            this.recentFilesToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.recentFilesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.recentFilesToolStripMenuItem.Text = "Recent Files";
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -327,14 +314,13 @@ namespace FuzzyByte.NokiaCooker
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.treeViewAdv1);
-            this.splitContainer1.Panel1.Controls.Add(this.label1);
             // 
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.gridFiles1);
             this.splitContainer1.Panel2.Controls.Add(this.statusStrip2);
-            this.splitContainer1.Size = new System.Drawing.Size(761, 271);
-            this.splitContainer1.SplitterDistance = 240;
+            this.splitContainer1.Size = new System.Drawing.Size(761, 25);
+            this.splitContainer1.SplitterDistance = 25;
             this.splitContainer1.TabIndex = 6;
             // 
             // treeViewAdv1
@@ -345,15 +331,14 @@ namespace FuzzyByte.NokiaCooker
             this.treeViewAdv1.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawAll;
             this.treeViewAdv1.HideSelection = false;
             this.treeViewAdv1.HotTracking = true;
-            this.treeViewAdv1.Location = new System.Drawing.Point(0, 20);
+            this.treeViewAdv1.Location = new System.Drawing.Point(0, 0);
             this.treeViewAdv1.Name = "treeViewAdv1";
             this.treeViewAdv1.ShowRootLines = false;
-            this.treeViewAdv1.Size = new System.Drawing.Size(240, 251);
+            this.treeViewAdv1.Size = new System.Drawing.Size(25, 25);
             this.treeViewAdv1.TabIndex = 1;
             this.treeViewAdv1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewAdv1_AfterSelect);
             this.treeViewAdv1.DragDrop += new System.Windows.Forms.DragEventHandler(this.treeViewAdv1_DragDrop);
             this.treeViewAdv1.DragEnter += new System.Windows.Forms.DragEventHandler(this.treeViewAdv1_DragEnter);
-            this.treeViewAdv1.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.treeViewAdv1_PreviewKeyDown);
             // 
             // contextTreeView
             // 
@@ -371,7 +356,6 @@ namespace FuzzyByte.NokiaCooker
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(134, 22);
             this.toolStripMenuItem1.Text = "Remove";
-            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click_1);
             // 
             // toolStripMenuItem2
             // 
@@ -397,16 +381,6 @@ namespace FuzzyByte.NokiaCooker
             this.collapseAllToolStripMenuItem.Text = "Collapse All";
             this.collapseAllToolStripMenuItem.Click += new System.EventHandler(this.collapseAllToolStripMenuItem_Click);
             // 
-            // label1
-            // 
-            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label1.Location = new System.Drawing.Point(0, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(240, 20);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Custom Firmwares";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // gridFiles1
             // 
             this.gridFiles1.AllowDrop = true;
@@ -417,13 +391,12 @@ namespace FuzzyByte.NokiaCooker
             this.gridFiles1.Margin = new System.Windows.Forms.Padding(2);
             this.gridFiles1.MultiSelect = false;
             this.gridFiles1.Name = "gridFiles1";
-            this.gridFiles1.Size = new System.Drawing.Size(517, 249);
+            this.gridFiles1.Size = new System.Drawing.Size(732, 3);
             this.gridFiles1.TabIndex = 12;
             this.gridFiles1.UseCompatibleStateImageBehavior = false;
             this.gridFiles1.DragDrop += new System.Windows.Forms.DragEventHandler(this.gridFiles1_DragDrop);
             this.gridFiles1.DragEnter += new System.Windows.Forms.DragEventHandler(this.gridFiles1_DragEnter);
             this.gridFiles1.DoubleClick += new System.EventHandler(this.gridFiles1_DoubleClick);
-            this.gridFiles1.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.gridFiles1_PreviewKeyDown);
             // 
             // contextFileView
             // 
@@ -441,7 +414,6 @@ namespace FuzzyByte.NokiaCooker
             this.removeFilesToolStripMenuItem.Name = "removeFilesToolStripMenuItem";
             this.removeFilesToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
             this.removeFilesToolStripMenuItem.Text = "Remove";
-            this.removeFilesToolStripMenuItem.Click += new System.EventHandler(this.removeFilesToolStripMenuItem_Click);
             // 
             // exploreToolStripMenuItem
             // 
@@ -469,9 +441,9 @@ namespace FuzzyByte.NokiaCooker
             this.lblEstimatedSize,
             this.toolStripStatusLabel7,
             this.lblPartSize});
-            this.statusStrip2.Location = new System.Drawing.Point(0, 249);
+            this.statusStrip2.Location = new System.Drawing.Point(0, 3);
             this.statusStrip2.Name = "statusStrip2";
-            this.statusStrip2.Size = new System.Drawing.Size(517, 22);
+            this.statusStrip2.Size = new System.Drawing.Size(732, 22);
             this.statusStrip2.SizingGrip = false;
             this.statusStrip2.TabIndex = 10;
             this.statusStrip2.Text = "statusStrip2";
@@ -503,7 +475,7 @@ namespace FuzzyByte.NokiaCooker
             // toolStripStatusLabel6
             // 
             this.toolStripStatusLabel6.Name = "toolStripStatusLabel6";
-            this.toolStripStatusLabel6.Size = new System.Drawing.Size(208, 17);
+            this.toolStripStatusLabel6.Size = new System.Drawing.Size(423, 17);
             this.toolStripStatusLabel6.Spring = true;
             // 
             // lblEstimatedSize
@@ -579,24 +551,18 @@ namespace FuzzyByte.NokiaCooker
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 52);
             // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 52);
-            // 
             // toolbar
             // 
             this.toolbar.ContextMenuStrip = this.contextToolBar;
             this.toolbar.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolbar.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.toolbar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.closeStripItem,
             this.btnOpen,
             this.btnSave,
             this.toolStripSeparator1,
             this.btnExplore,
             this.toolStripSeparator5,
-            this.btnDelete,
-            this.toolStripSeparator2,
             this.btnUnlockRofs,
             this.btnRofs1Increase,
             this.btnRepartition});
@@ -627,6 +593,16 @@ namespace FuzzyByte.NokiaCooker
             this.showTextToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
             this.showTextToolStripMenuItem.Text = "Show Text";
             this.showTextToolStripMenuItem.Click += new System.EventHandler(this.showTextToolStripMenuItem_Click);
+            // 
+            // closeStripItem
+            // 
+            this.closeStripItem.Enabled = false;
+            this.closeStripItem.Image = global::FuzzyByte.NokiaCooker.Properties.Resources.Cancel24;
+            this.closeStripItem.Name = "closeStripItem";
+            this.closeStripItem.Size = new System.Drawing.Size(47, 52);
+            this.closeStripItem.Text = "Close";
+            this.closeStripItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.closeStripItem.Click += new System.EventHandler(this.toolStripMenuItem3_Click_1);
             // 
             // btnOpen
             // 
@@ -665,17 +641,6 @@ namespace FuzzyByte.NokiaCooker
             this.toolStripSeparator5.Name = "toolStripSeparator5";
             this.toolStripSeparator5.Size = new System.Drawing.Size(6, 52);
             // 
-            // btnDelete
-            // 
-            this.btnDelete.Enabled = false;
-            this.btnDelete.Image = global::FuzzyByte.NokiaCooker.Properties.Resources.Cancel24;
-            this.btnDelete.ImageTransparentColor = System.Drawing.Color.Black;
-            this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(77, 49);
-            this.btnDelete.Text = "Remove Files";
-            this.btnDelete.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
-            // 
             // btnUnlockRofs
             // 
             this.btnUnlockRofs.Enabled = false;
@@ -690,7 +655,7 @@ namespace FuzzyByte.NokiaCooker
             // btnRofs1Increase
             // 
             this.btnRofs1Increase.Enabled = false;
-            this.btnRofs1Increase.Image = global::FuzzyByte.NokiaCooker.Properties.Resources.LR;
+            this.btnRofs1Increase.Image = global::FuzzyByte.NokiaCooker.Properties.Resources.Resize_ROFS;
             this.btnRofs1Increase.ImageTransparentColor = System.Drawing.Color.Black;
             this.btnRofs1Increase.Name = "btnRofs1Increase";
             this.btnRofs1Increase.Size = new System.Drawing.Size(83, 49);
@@ -722,8 +687,8 @@ namespace FuzzyByte.NokiaCooker
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.textAreaAdv1);
-            this.splitContainer2.Size = new System.Drawing.Size(761, 404);
-            this.splitContainer2.SplitterDistance = 271;
+            this.splitContainer2.Size = new System.Drawing.Size(761, 213);
+            this.splitContainer2.SplitterDistance = 25;
             this.splitContainer2.TabIndex = 8;
             // 
             // textAreaAdv1
@@ -736,7 +701,7 @@ namespace FuzzyByte.NokiaCooker
             this.textAreaAdv1.Name = "textAreaAdv1";
             this.textAreaAdv1.ReadOnly = true;
             this.textAreaAdv1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textAreaAdv1.Size = new System.Drawing.Size(761, 129);
+            this.textAreaAdv1.Size = new System.Drawing.Size(761, 184);
             this.textAreaAdv1.TabIndex = 1;
             // 
             // checkBox1
@@ -893,14 +858,6 @@ namespace FuzzyByte.NokiaCooker
             this.openFileDialog3.RestoreDirectory = true;
             this.openFileDialog3.Title = "Add Files";
             // 
-            // bwDeleteTrashFolder
-            // 
-            this.bwDeleteTrashFolder.WorkerReportsProgress = true;
-            this.bwDeleteTrashFolder.WorkerSupportsCancellation = true;
-            this.bwDeleteTrashFolder.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bwDeleteTrashFolder_DoWork);
-            this.bwDeleteTrashFolder.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bwDeleteTrashFolder_ProgressChanged);
-            this.bwDeleteTrashFolder.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bwDeleteTrashFolder_RunWorkerCompleted);
-            // 
             // saveFileDialog1
             // 
             this.saveFileDialog1.DefaultExt = "dmp";
@@ -913,7 +870,7 @@ namespace FuzzyByte.NokiaCooker
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(761, 532);
+            this.ClientSize = new System.Drawing.Size(761, 341);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.checkBox1);
@@ -983,7 +940,6 @@ namespace FuzzyByte.NokiaCooker
         private System.Windows.Forms.ToolStripMenuItem importROFSMenuItem;
         private System.Windows.Forms.OpenFileDialog openROFS;
         private System.Windows.Forms.TreeView treeViewAdv1;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.StatusStrip statusStrip2;
         private System.Windows.Forms.ToolStripStatusLabel lblFolders;
         private System.Windows.Forms.ToolStripStatusLabel lblFiles;
@@ -994,8 +950,6 @@ namespace FuzzyByte.NokiaCooker
         private System.Windows.Forms.ToolStripButton btnOpen;
         private System.Windows.Forms.ToolStripButton btnSave;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripButton btnDelete;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStrip toolbar;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.TextBox textAreaAdv1;
@@ -1044,8 +998,8 @@ namespace FuzzyByte.NokiaCooker
         private System.Windows.Forms.ToolStripMenuItem collapseAllToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem extractRomMenuItem;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel5;
         private System.Windows.Forms.ToolStripButton btnRepartition;
+        private System.Windows.Forms.ToolStripMenuItem closeStripItem;
     }
 }
 

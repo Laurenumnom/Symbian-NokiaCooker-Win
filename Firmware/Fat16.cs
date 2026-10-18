@@ -685,7 +685,7 @@ namespace Firmware
             ordinal = br.ReadByte();
             longFilename1 = br.ReadBytes(longFilename1.Length);
             lfnAttrib = br.ReadByte();
-            Debug.Assert((lfnAttrib & (byte)EAttribFlag.LongFileName) == (byte)EAttribFlag.LongFileName);
+            Debug.Assert((lfnAttrib & (byte)EAttribFlag.LongFileName) == (byte)EAttribFlag.LongFileName, "Fat16 LFN flag mismatch");
 
             reserved = br.ReadByte();
             dosNameChecksum = br.ReadByte();

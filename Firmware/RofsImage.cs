@@ -425,7 +425,7 @@ namespace Firmware
 
             private Process CreateBuildRofsProcess(string folder)
             {
-                string fname = folder + "RofsBuild.exe";
+                string fname = "RofsBuild.exe";
 #if DEBUG
                 if (!File.Exists(fname))
                     return null;
@@ -436,8 +436,8 @@ namespace Firmware
                 rCompExe.StartInfo.RedirectStandardOutput = true;
                 rCompExe.StartInfo.RedirectStandardError = true;
                 rCompExe.StartInfo.CreateNoWindow = true;
-                rCompExe.StartInfo.FileName = fname;
-                rCompExe.StartInfo.WorkingDirectory = Path.GetDirectoryName(rCompExe.StartInfo.FileName);
+                rCompExe.StartInfo.FileName = "RofsBuild.exe";
+                rCompExe.StartInfo.WorkingDirectory = Path.GetDirectoryName(folder);
                 if (!System.IO.File.Exists(rCompExe.StartInfo.FileName))
                     throw new RofsException("RofsBuild.exe not found: " + rCompExe.StartInfo.FileName);
                 return rCompExe;
@@ -579,18 +579,6 @@ namespace Firmware
             }*/
 
 
-            private string GetCustomerSwLocalPath()
-            {
-                string fname = "\\resource\\versions\\customersw.txt";
-                foreach (string remote_path in _newFiles.Keys)
-                {
-                    if (remote_path.ToLower().Contains(fname))
-                        return _newFiles[remote_path];
-                }
-                return "";
-            }
-
-
             public override void CloseImage()
             {
 //                if (_newFiles.Count > 0 || _newFolders.Count > 0)
@@ -608,18 +596,6 @@ namespace Firmware
 
                     // Temporaneo repack "grezzo"...
 
-                    // Get the filename for \\resource\customersw.txt
-                    // Replace the content with NokiaCooker signature
-                    string oldText = "";
-                    FileAttributes oldAttrib = FileAttributes.Normal;
-                    string fname = GetCustomerSwLocalPath();
-                    if (fname != "")
-                    {
-                        oldText = File.ReadAllText(fname);
-                        oldAttrib = File.GetAttributes(fname);
-                        File.SetAttributes(fname, FileAttributes.Normal);
-                        File.WriteAllText(fname, iCfwSignature, Encoding.Unicode);
-                    }
 
                     try
                     {
@@ -630,16 +606,6 @@ namespace Firmware
                     {
                         throw ex;
                     }
-                    finally
-                    {
-                        // Restore file attrib and content
-                        if (fname != "")
-                        {
-                            File.WriteAllText(fname, oldText, Encoding.Unicode);
-                            File.SetAttributes(fname, oldAttrib);
-                        }
-                    }
-
 
                     if (header.iIdentifier[3] == 'x')
                     {
@@ -722,22 +688,22 @@ namespace Firmware
                 foreach (TRofsEntry aFile in aDir.files)
                 {
                     bool extract = true;
-                    string flag = "";
+                    //string flag = "";
                     if (aFile.iFileAddress < header._iAdjustment)
                     {
                         extract = false;                        // E71   ROFX   rm346_510.21.009_prd  
-                        flag = " ROFS1-CORE Reference ";        // La ROFS2 fa riferimento ai file della ROFS1
+                        //flag = " ROFS1-CORE Reference ";        // La ROFS2 fa riferimento ai file della ROFS1
                         // In questo caso non e' possibile modificare la ROFS1 perche' questi riferimenti (presenti nella ROFS2) non verranno aggiornati.
                     }
                     if (aFile.iFileAddress == 0)
                     {
                         extract = false;
-                        flag = " HIDDEN in ROFX ";
+                        //flag = " HIDDEN in ROFX ";
                     }
                     if (aFile.iFileAddress == 0xFFFFFFFF)
                     {
                         extract = false;
-                        flag = " HIDDEN in ROFS ";  // Caso Atipico
+                        //flag = " HIDDEN in ROFS ";  // Caso Atipico
                     }
 
                    // if (flag != "")

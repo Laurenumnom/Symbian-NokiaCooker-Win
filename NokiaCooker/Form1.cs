@@ -55,7 +55,6 @@ namespace FuzzyByte.NokiaCooker
         private readonly string ROFX_IMG = "ROFX.ROM";              // se c'e' il VPL nominalo ROFS_2crc.ROM e ROFS_3crc.ROM
         private readonly string CORE_ROFS1_IMG = "ROFS1.ROM";
         private readonly string FAT_IMG = "FAT.IMA";
-        private readonly string MMC_IMG = "FAT2.IMA";
         private readonly string UNKN_IMG = "UNKN.BIN";
 
         // CORE <FileSubType>Mcu</FileSubType>
@@ -215,9 +214,9 @@ namespace FuzzyByte.NokiaCooker
             btnRofs1Increase.Enabled = state;
             btnSave.Enabled = state;
             btnExplore.Enabled = state;
-            btnDelete.Enabled = state;
             saveMenuItem.Enabled = state;
             closeMenuItem.Enabled = state;
+            closeStripItem.Enabled = state;
             contextFileView.Enabled = state;
             contextTreeView.Enabled = state;
 
@@ -283,7 +282,7 @@ namespace FuzzyByte.NokiaCooker
                 System.Reflection.Assembly assembly = System.Reflection.Assembly.LoadFrom(exeFile);
                 tooltip = AssemblyData.Description(assembly);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Check if it is an Exe PE
                 FileStream fs = File.OpenRead(exeFile);
@@ -565,7 +564,7 @@ namespace FuzzyByte.NokiaCooker
             }
             catch (Exception xcp)
             {
-                // Console.WriteLine(proc.ProcessName + ": " + xcp.Message);
+                Console.WriteLine(proc.ProcessName + ": " + xcp.Message);
             }
             finally
             {
@@ -925,7 +924,7 @@ namespace FuzzyByte.NokiaCooker
             try
             {
                 System.IO.Directory.Delete(TmpFiles, true);   // nel caso in cui qualche file non sia stato spostato per qualche motivo
-            } catch (Exception ex)
+            } catch (Exception)
             {
                 fwFile_Log("!!! File deletion error!", EventType.Warning);
             }
@@ -1303,7 +1302,6 @@ namespace FuzzyByte.NokiaCooker
                 UInt32 len2 = 0;
                 string sha1_cnt = "";
 
-                byte[] oldCont = null;
                 foreach (TBlock aBlock in group.certBlocks)
                 {
                     Debug.WriteLine(aBlock);
@@ -1508,336 +1506,6 @@ namespace FuzzyByte.NokiaCooker
             }
             return;
 
-            FwFile test = new FwFile();
-/*            test.Open(@"K:\fw\PortC6_5800\ORI_Port\RM-356_60.0.003_prd.rofs2.v05"); // E' un file .fpsx embedded
-            test.Read();
-            test.ExtractGroupsToPath(@"K:\fw\PortC6_5800\Groups_Port\");
-            test.Close();
-            test.Open(@"K:\fw\0591778\ORI_5800\RM-356_52.0.101_prd.rofs2.v01"); // E' un file .fpsx embedded
-            test.Read();
-            test.ExtractGroupsToPath(@"K:\fw\PortC6_5800\Groups_5800\");
-            test.Close();
-            test.Open(@"K:\fw\0595425\ORI_C6\RM-612_42.0.004_prd.rofs2.v08"); // E' un file .fpsx embedded
-            test.Read();
-            test.ExtractGroupsToPath(@"K:\fw\PortC6_5800\Groups_C6\");
-            test.Close();/**/
-
-            test.Open(@"K:\fw\PortC6_5800\ORI_Port\RM-356_60.0.003_prd.core.c0r"); // E' un file .fpsx embedded
-            test.Read();
-            test.ExtractGroupsToPath(@"K:\fw\PortC6_5800\Groups_Port\");
-            test.Close();/**/
-            test.Open(@"K:\fw\0591778\ORI_5800\RM-356_60.0.003_prd.core.c00"); // E' un file .fpsx embedded
-            test.Read();
-            test.ExtractGroupsToPath(@"K:\fw\PortC6_5800\Groups_5800\");
-            test.Close();/**/
-            test.Open(@"K:\fw\0595425\ORI_C6\RM-612_42.0.004_prd.core.c00"); // E' un file .fpsx embedded
-            test.Read();
-            test.ExtractGroupsToPath(@"K:\fw\PortC6_5800\Groups_C6\");
-            test.Close();/**/
-            /*
-            FwFile test = new FwFile();
-            test.Open(@"K:\fw\0591778\fw60_5800_DataFA.bin"); // E' un file .fpsx embedded
-            // test.Open(@"K:\fw\0591778\fw52_5800_DataF3.bin"); // Contiene header + un immagine
-            test.Read();
-            test.ExtractGroupsToPath(@"K:\fw\0591778\fw60_FA\");
-            test.Close();
-            return;*/
-/*            Fat16Image img1 = new Fat16Image();
-            img1.OpenImage(@"C:\ProgettiInCorso\NokiaCooker\NokiaCooker\bin\Debug\Images\FullIma.ima");            
-            img1.CloseImage();
-            return;*/
-            //            fwFile.ExtendRofs1();
-            // TODO: Retrieves sections and show sizes in the GUI...
-            // uda.fwFile.Repartition(0x1000, 0x2000);
-            // rofs2.fwFile.Repartition(0x1000, 0x2000);
-            // rofs3.fwFile.Repartition(0x1000, 0x2000);
-
-//            fwFile.RepartitionCore(0x10000000, 0x0b000000, 0x00400000, 0x01000000);
-
-            //TLV_Partition_Info_BB5 bb5 = fwFile.header.GetPartitionInfoBb5TLV();
-            //bb5.ChangeSystemEnd(0x0D980000);
-            /*TGroup keys = fwFile.blocksColl.GetGroupMatchingDescrition("KEYS");
-            if (keys != null)
-            {
-                TBlockType27_ROFS_Hash block_rofs_hash = keys.certBlocks[0].blockHeader as TBlockType27_ROFS_Hash;
-                // TODO: Check block_rofs_hash.cmt_root_key_hash20_sha1 
-            }
-            TGroup grp = fwFile.blocksColl.GetGroupMatchingDescrition("PASUB");
-            Content_PaSubToc cnt = new Content_PaSubToc(grp.certBlocks[0].content);
-            cnt.ExtractToPath(@"C:\Users\Root\Desktop\Extr\");*/
-
-            //fwFile.ExtractGroupsToPath(@"C:\Users\Root\Desktop\Extr\");
-            //fwFile.ExtractRawImageToFile(@"C:\Users\Root\Desktop\Extr\raw.img");
-            //8A4EA50765 6D 43 12 F4 DA 94 A6 44 D5 8B 48 438222BB
-
-            /*
-            TGroup group = fwFile.blocksColl.GetGroupForFwType(fwFile.FwType);            
-            Content_Sha1 blk = new Content_Sha1(group.descrBlock.content);
-
-            //byte[] allBytes2 = group.list[0].content; 
-            byte[] allBytes2 = File.ReadAllBytes(@"C:\Users\Root\Desktop\Extr\3477_00000D95_SOS+ROFS3_17.bin");
-            string sha1_in_block = BytesUtils.ToHex(blk.hash20_sha1);
-            sha1_in_block = sha1_in_block.Replace(" ", "");
-
-            long dataLen1 = blk.length2 - group.descrBlock.content.Length;
-            byte[] newArr1 = new byte[dataLen1];
-            Array.Copy(allBytes2, 0, newArr1, 0, newArr1.Length);
-            string sha1_1 = Analysis.ComputeSHA1(newArr1).Replace(" ", "");
-            if (sha1_in_block == sha1_1)
-            {
-                return;
-            }
-            for (int i = 0; i < allBytes2.Length; i++)
-            {
-                for (int dataLen = allBytes2.Length - i; dataLen > 0; dataLen--)
-                {
-                    byte[] newArr = new byte[dataLen];
-                    Array.Copy(allBytes2, i, newArr, 0, newArr.Length);
-                    string sha1 = Analysis.ComputeSHA1(newArr).Replace(" ", "");
-                    if (sha1 == sha1_in_block)
-                    {
-                        // e' lo SHA1 calcolato sui dati senza i pacchetti di check.
-                        // ed e' calcolato senza il padding finale
-
-                        // 71303 invece di 70F04 (ci sono 0x3FF byte di troppo)
-
-                        // 0x00002CD3 (ci sono 0x3FF byte di troppo rispetto al 0x28D4)
-                        // start = 0x537    +   dataLen = 0x28D4    =>   end = 0x2E0B
-                        // EndFile = 0x2F37
-
-                        
-                        // 0x00002D3B (ci sono 0x3FF byte di troppo rispetto al 0x293C)
-                        // start = 0x537    +   dataLen = 0x293C    =>   end = 0x2E73
-                        // EndFile = 0x2F37
-                    }
-                    Application.DoEvents();
-                }
-            }/**/
-            /*            byte[] allBytes2 = File.ReadAllBytes(@"c:\Data1.bin");
-                        for (int i=0; i<allBytes2.Length; i++)
-                        {
-                            byte[] newArr = new byte[allBytes2.Length-i];
-                            Array.Copy(allBytes2, i, newArr, 0, newArr.Length);
-                            string md5 = Analysis.ComputeMD5(newArr).Replace(" ", "");
-                            if (md5.StartsWith("916F75") ||md5.StartsWith("1BE8C8"))
-                            {
-                            }
-                        }*/
-            return;
-
-#if DEBUG
-            string exePath = @"C:\ProgettiInCorso\NokiaCooker\TestPlugins\bin\Debug\TestPlugins.exe";
-            PermissionSet ps = new PermissionSet(PermissionState.None);
-            ps.AddPermission(new SecurityPermission(SecurityPermissionFlag.Execution));
-            ps.AddPermission(new FileIOPermission(FileIOPermissionAccess.Read | FileIOPermissionAccess.PathDiscovery, exePath));
-            ps.AddPermission(new System.Security.Permissions.UIPermission(PermissionState.Unrestricted));
-            ps.AddPermission(new System.Security.Permissions.FileIOPermission(FileIOPermissionAccess.AllAccess, TmpFiles));
-
-            AppDomainSetup setup = AppDomain.CurrentDomain.SetupInformation;
-            AppDomain sandbox = AppDomain.CreateDomain("Sandbox", null, setup, ps);
-
-            string[] args = new string[3];
-            args[0] = TmpFiles;                             // Path di estrazione
-            args[1] = Path.GetFileName(fwFile.filename);    // FileName UDA
-            args[2] = fwFile.FwType.ToString();             // UDA, ROFS, ROFX, CORE, UNKNOWN
-            sandbox.ExecuteAssembly(exePath, null, args);
-            AppDomain.Unload(sandbox);
-            return;
-
-            Fat16Image img = new Fat16Image();
-            img.OpenImage(@"C:\ProgettiInCorso\NokiaCooker\FwExplorer\bin\Debug\Images\my_test1.ima");
-            //img.Extract(@"c:\temp\");
-            img.CloseImage();
-            return;
-
-            Crc32_Fixer fixer = new Crc32_Fixer();
-            byte[] allBytes = File.ReadAllBytes(@"C:\Documents and Settings\Root\Desktop\Fonix_rm400_03.31_prd_vTMHU_01_TMHU.fpsx");
-            byte[] fixBytes = fixer.FixChecksum(allBytes, 0x14, 0x0227487F);
-            allBytes[0x14] = fixBytes[0];
-            allBytes[0x15] = fixBytes[1];
-            allBytes[0x16] = fixBytes[2];
-            allBytes[0x17] = fixBytes[3];
-            File.WriteAllBytes(@"C:\Documents and Settings\Root\Desktop\Fonix_B_rm400_03.31_prd_vTMHU_01_TMHU.fpsx", allBytes);
-            return;
-            RofsImage rofs1 = new RofsImage();
-            RofsImage rofs2 = new RofsImage();
-            //rofs1.Log += new LogHandler(fwFile_Log);
-            rofs1.OpenImage(@"C:\ProgettiInCorso\NokiaCooker\FwExplorer\bin\Debug\Images\rofs.rom");
-            rofs1.Extract("c:\\test111\\");
-            rofs1.CloseImage();
-
-            return;
-            this.GUI_PopulateFileListFromPath(@"C:\Documents and Settings\Root\Desktop\ObjectListView");
-            return;
-            RofsImage rofs = new RofsImage();
-            rofs.OpenImage(@"C:\rofstool\ext5.rom");
-            rofs.CloseImage();
-
-
-            Fat16Image fatFile = new Fat16Image();
-            fatFile.OpenImage(@"C:\Documents and Settings\Root\Desktop\Fw\N95_RM159\EmptyFat2.IMA");
-            fatFile.ClearImage();
-            fatFile.CloseImage();
-
-            /*//fwFile.Open(fwPath + "N95_RM159\\RM159_31.0.002_039_U01_uda.fpsx");         // Type 2E
-            //fwFile.ExtractAlignedCodeToFile("c:\\img.img");
-            Fat16 fat16 = new Fat16();
-            fat16.OpenImage("c:\\img.img");
-            fat16.CompressFAT();        
-            fat16.CloseImage();
-            return;
-            
-            Crc32 crc32 = new Crc32();
-            byte[] allBytes = File.ReadAllBytes("C:\\Programmi\\Nokia\\Phoenix\\Products\\rm-159\\new.RM159_31.0.002_039_U01_uda.fpsx");
-            byte[] fixBytes = crc32.FixChecksum(allBytes, 0x0266226d-4, 0x3ba7afc9);
-            
-            return;
-
-            //fwFile.Open(fwPath + "REB-RM505_507_20.0.019_uda_1_001.uda.fpsx");
-            //fwFile.Open(fwPath + "N95_RM159\\RM159_31.0.002_039_U01_uda.fpsx");         // Type 2E
-            //return;
-            /*      fwFile.Open(fwPath + "N95_RM159\\RM159_31.0.002_039_U01_uda.fpsx");         // Type 2E
-                  fwFile.Repack("c:\\in my heart.dr", "c:\\aaa.txt");
-
-                  // N95 SET
-                  //fwFile.Open(fwPath + "N95_RM159\\RM-159_35.0.002_PR.C0R");
-                  //fwFile.Open(fwPath + "N95_RM159\\RM159_31.0.002_039_U01_uda.fpsx");         // Type 2E
-                  //fwFile.Open(fwPath + "N95_RM159\\RM-159_35.0.002_PR.v01");                                  // 27 e 17
-
-                  fwFile.Open(fwPath + "ENO_N95\\rm159_ENO_x_2007wk16v0.220_sos.fpsx");
-*/
-
-            // CORE SET*/
-            return;
-            string fwPath = "C:\\Documents and Settings\\Root\\Desktop\\fw\\";
-            fwFile = new FwFile();
-            fwFile.Open(fwPath + "N97_RM505\\RM-505_12.0.024_prd.core.C00");
-            fwFile.Open(fwPath + "N95_RM159\\RM-159_35.0.002_PR.C0R");
-            fwFile.Open(fwPath + "5700_RM302\\rm302_03.27_prd_core_lta_2.fpsx");
-            fwFile.Open(fwPath + "6790Slide_RM599\\rm599_03.45_PI-229_prd_core.fpsx");
-            fwFile.Open(fwPath + "6790Surge_RM492\\rm492_03.22_prd_core.fpsx");
-            fwFile.Open(fwPath + "3250_RM38\\rm38_04.21_prod_core.fpsx");
-            fwFile.Open(fwPath + "6710_RM491\\rm491_022.013_prd.core.fpsx");
-            fwFile.Open(fwPath + "5320_RM409\\rm409_06.103_prd_core.fpsx");
-            fwFile.Open(fwPath + "N86_RM484\\RM-484_21.006_prd.core.fpsx");
-            fwFile.Open(fwPath + "N93_RM153\\RM153PE201058.C1");
-            fwFile.Open(fwPath + "E61_RM89\\rm89_m128_h20_ks_prod_306330904_c00_combined.bin");
-            fwFile.Open(fwPath + "N79_RM350\\RM-350_32.001_prd.core.fpsx");
-            fwFile.Open(fwPath + "E90_RA6\\RA6p_074012.C01");
-            fwFile.Open(fwPath + "E51_RM244\\rm244_40034011_prd.c00");
-            fwFile.Open(fwPath + "E55_RM482\\rm482_031.012_prd.core.fpsx");
-            fwFile.Open(fwPath + "N80_RM92\\n80_5.0725.0.1-prd_western_c00_cc.fpsx");
-            fwFile.Open(fwPath + "N96_RM472\\RM-472_30.033_prd.core.fpsx");
-            fwFile.Open(fwPath + "N97_RM507\\RM-507_20.2.019_prd.core.C00");
-            fwFile.Open(fwPath + "X6_RM559\\RM-559_12.0.088_prd.core.C00");
-
-
-            // ENO SET
-            //fwFile.Open(fwPath + "ENO_N95\\Normalize_susd_aaltov_0.220.fpsx");
-            //fwFile.Open(fwPath + "ENO_N95\\rm159_ENO_x_2007wk16v0.220_sos.fpsx");*/
-
-            // FW Files SET
-            //fwFile.Open(fwPath + "5700_RM302\\rm302_03.27_prd_core_lta_2.fpsx");            
-            fwFile.Open(fwPath + "5700_RM302\\rm302_03.27_prd_vLT01_01_Telcel.fpsx");                   // 5x27 e 17
-
-            //            fwFile.Open(fwPath + "6790Slide_RM599\\rm599_03.45_PI-229_prd_core.fpsx");
-            fwFile.Open(fwPath + "6790Slide_RM599\\RM599_03.45_PI-229_001_U001.uda.fpsx");              // 17
-            fwFile.Open(fwPath + "6790Slide_RM599\\rm599_03.45_PI-229_prd_v18_01_latinamerica.fpsx");   // 3x27 e 17
-            fwFile.Open(fwPath + "6790Slide_RM599\\rm599_03.45_prd_v254_01_TIGO_CA.fpsx");              // 3x27 e 17 (piccolo)
-
-            //            fwFile.Open(fwPath + "6790Surge_RM492\\rm492_03.22_prd_core.fpsx");
-            fwFile.Open(fwPath + "6790Surge_RM492\\rm492_03.22_prd_v6000_01_jig_att.fpsx");             // 1x27 e 17
-            fwFile.Open(fwPath + "6790Surge_RM492\\rm492_03.22_prd_vJI01_01.rofs3.fpsx");               // 1x27 e 17
-
-            //            fwFile.Open(fwPath + "3250_RM38\\rm38_04.21_prod_core.fpsx");
-            fwFile.Open(fwPath + "3250_RM38\\rm38_04.21_prod_content_erase.fpsx");                      // Nessuno...
-            fwFile.Open(fwPath + "3250_RM38\\rm38_04.21_prod_variant_31.fpsx");                         // 2x27 e 17
-
-            //fwFile.Open(fwPath + "3250_RM38\\rm38_04.14_prod_core.fpsx");
-            fwFile.Open(fwPath + "3250_RM38\\rm38_04.14_prod_variant_60.fpsx");                         // 2x27 e 17
-            //fwFile.Open(fwPath + "3250_RM38\\rm38_04.14_LFFS_Image_EMEA.fpsx");         // CRC tutti sballati...
-
-            //fwFile.Open(fwPath + "3250_RM38\\Thunder_03.24_Core.fpsx");
-            fwFile.Open(fwPath + "3250_RM38\\Thunder_03.24_Variant_01.fpsx");                           // 27 e 17
-            //fwFile.Open(fwPath + "3250_RM38\\Thunder_03.24_LFFS_Image_EMEA.fpsx");      // CRC tutti sballati...
-
-            //fwFile.Open(fwPath + "6710_RM491\\rm491_022.013_prd.core.fpsx");
-            fwFile.Open(fwPath + "6710_RM491\\rm491_022.013_U005.000_prd.uda.fpsx");                    // 17 (piccolo)
-            fwFile.Open(fwPath + "6710_RM491\\rm491_022.013_14.01_APAC1_prd.rofs2.fpsx");               // 27 e 17
-            fwFile.Open(fwPath + "6710_RM491\\rm491_022.013_prd.rofs3.fpsx");                           // 27 e 17 (piccolo con tanti 27 ma un solo 17)
-
-            //fwFile.Open(fwPath + "5320_RM409\\rm409_06.103_prd_core.fpsx");
-            fwFile.Open(fwPath + "5320_RM409\\rm409_06.103_prd_v01_05_UDA_PRD.fpsx");                   // 17 (grande)
-            fwFile.Open(fwPath + "5320_RM409\\rm409_06.103_prd_v19_01_china.fpsx");                     // 27 e 17
-            fwFile.Open(fwPath + "5320_RM409\\rm409_06.103_prd_v300_01_PRC_CV_R.fpsx");                 // 27 e 17
-
-
-            //fwFile.Open(fwPath + "N86_RM484\\RM-484_21.006_prd.core.fpsx");
-            fwFile.Open(fwPath + "N86_RM484\\rm484_ENO_x_2009wk42v0.a004");                             // 27 e 17
-            fwFile.Open(fwPath + "N86_RM484\\RM-484_21.006_001_prd.language.fpsx");                     // 27 e 17
-            fwFile.Open(fwPath + "N86_RM484\\RM-484_21.006_003_U001.uda.fpsx");                         // 17
-
-
-            //fwFile.Open(fwPath + "N93_RM153\\RM153PE201058.C1");                 
-            fwFile.Open(fwPath + "N93_RM153\\RM153_8495468_V5.00.fpsx");                // Type 2E
-            fwFile.Open(fwPath + "N93_RM153\\V1RM153PE201058.V68");                                     // 17 <--> CONTIENE IMMAGINE DELLA ROFS !!!
-
-
-            //fwFile.Open(fwPath + "E61_RM89\\rm89_m128_h20_ks_prod_306330904_c00_combined.bin");     
-            fwFile.Open(fwPath + "E61_RM89\\rm89_m128_h20_ks_prod_306330904_v01_variant.bin");          // 17
-
-
-            //fwFile.Open(fwPath + "N79_RM350\\RM-350_32.001_prd.core.fpsx");
-            fwFile.Open(fwPath + "N79_RM350\\RM-350_32.001_003_000_U001.uda.fpsx");                     // 17
-            fwFile.Open(fwPath + "N79_RM350\\RM-350_32.001_026_prd.language.fpsx");                     // 27 e 17
-            fwFile.Open(fwPath + "N79_RM350\\viviennam_eno_imaker_ape_only.fpsx");                      // 27 e 17
-
-
-            //fwFile.Open(fwPath + "E90_RA6\\RA6p_074012.C01");                     
-            fwFile.Open(fwPath + "E90_RA6\\RA6p_074012.U01");                           // Type 2E
-            fwFile.Open(fwPath + "E90_RA6\\RA6p_074012.L01");                                           // 27 e 17
-
-            //fwFile.Open(fwPath + "E51_RM244\\rm244_40034011_prd.c00");            
-            fwFile.Open(fwPath + "E51_RM244\\rm244_40034011.01U");                      // Type 30  ...Contiene solo CMT non APE...
-            fwFile.Open(fwPath + "E51_RM244\\rm244_40034011_prd.v18");                                  // 27 e 17
-
-            //fwFile.Open(fwPath + "E55_RM482\\rm482_031.012_prd.core.fpsx");
-            fwFile.Open(fwPath + "E55_RM482\\RM482_APE_ONLY_09w23v0.039.fpsx");                         // 27 e 17
-            fwFile.Open(fwPath + "E55_RM482\\rm482_031.012_U000.000_prd.uda.fpsx");                     // 17 (piccolo)
-            fwFile.Open(fwPath + "E55_RM482\\rm482_031.012_01.01_Euro1_prd.rofs2.fpsx");                // 27 e 17 
-            fwFile.Open(fwPath + "E55_RM482\\rm482_031.012_C00.01_DEFAULT_prd.rofs3.fpsx");             // 27 e 17
-
-            //fwFile.Open(fwPath + "N80_RM92\\n80_5.0725.0.1-prd_western_c00_cc.fpsx"); 
-            fwFile.Open(fwPath + "N80_RM92\\N80_userarea_5.0725.0.1-prd.U04");          // Type 2E
-            fwFile.Open(fwPath + "N80_RM92\\N80_rofx_5.0725.0.1-prd.V10");                              // 17
-
-
-            //fwFile.Open(fwPath + "N95_RM159\\RM-159_35.0.002_PR.C0R");                
-            fwFile.Open(fwPath + "N95_RM159\\RM159_31.0.002_039_U01_uda.fpsx");         // Type 2E
-            fwFile.Open(fwPath + "N95_RM159\\RM-159_35.0.002_PR.v01");                                  // 27 e 17
-
-            //fwFile.Open(fwPath + "N96_RM472\\RM-472_30.033_prd.core.fpsx");           
-            fwFile.Open(fwPath + "N96_RM472\\RM-472_30.033_100.1_prd.uda.fpsx");        // Type 30
-            fwFile.Open(fwPath + "N96_RM472\\RM-472_30.033_024.1_prd.language.fpsx");                   // 27 e 17      <--- strange format....
-            fwFile.Open(fwPath + "N96_RM472\\RM-472_30.033_216.3_prd.customer.fpsx");                   // 27 e 17      <--- strange format....
-
-            //fwFile.Open(fwPath + "N97_RM507\\RM-507_20.2.019_prd.core.C00");
-            fwFile.Open(fwPath + "N97_RM507\\RM505_507_20.0.019_uda_1_001.uda.fpsx");                   // 17
-            fwFile.Open(fwPath + "N97_RM507\\rm505ENOA09w23v0.071.fpsx");                               // 27 e 17
-            fwFile.Open(fwPath + "N97_RM507\\RM-507_20.2.019_prd.rofs2.V30");                           // 27 e 17
-
-            //fwFile.Open(fwPath + "N97_RM505\\RM-505_12.0.024_prd.core.C00");
-            fwFile.Open(fwPath + "N97_RM505\\rm505ENOA09w23v0.010.fpsx");
-            fwFile.Open(fwPath + "N97_RM505\\RM-505_12.0.024_prd.rofs2.V20");
-            fwFile.Open(fwPath + "N97_RM505\\RM-505_12.0.024_C01_prd.rofs3.fpsx");
-            fwFile.Open(fwPath + "N97_RM505\\RM505_507_12.0.024_uda1_001.uda.fpsx");
-
-            //fwFile.Open(fwPath + "X6_RM559\\RM-559_12.0.088_prd.core.C00");
-            fwFile.Open(fwPath + "X6_RM559\\RM559_12.0.088_011_000_U001.uda.fpsx");                     // 17
-            fwFile.Open(fwPath + "X6_RM559\\RM-559_12.0.088_prd.rofs2.V22");                            // 27 e 17
-            fwFile.Open(fwPath + "X6_RM559\\RM-559_12.0.088_C02_prd.rofs3.fpsx");                       // 27 e 17
-            /**/
-#endif
         }
         #endregion
 
@@ -1887,10 +1555,7 @@ namespace FuzzyByte.NokiaCooker
         {
             get
             {
-                string localFilePath = treeViewAdv1.SelectedNode.FullPath;
-                if (localFilePath.StartsWith("" + Path.DirectorySeparatorChar))
-                    localFilePath = localFilePath.Substring(1);
-                string fullFilePath = TmpFiles + localFilePath;
+                string fullFilePath = TmpFiles;
                 return fullFilePath;
             }
         }
@@ -1952,16 +1617,6 @@ namespace FuzzyByte.NokiaCooker
             LaunchBrowser("www.symbian-toys.com/donatebtn.aspx?sw=NokiaCooker&retpage=NokiaCooker.aspx#donate");
         }
 
-
-
-        private void treeViewAdv1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
-        {
-            if (e.KeyValue == 0x2E)
-            {
-                btnDelete.PerformClick();
-            }
-        }
-
         private void treeViewAdv1_DragEnter(object sender, DragEventArgs e)
         {
             Debug.WriteLine("TREE DragEnter");
@@ -2003,7 +1658,7 @@ namespace FuzzyByte.NokiaCooker
                 imageFile.Extract(TmpFiles);
                 imageFile.CloseImage();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 fwFile_Log("!!! File deletion error!", EventType.Warning);
             }
@@ -2502,7 +2157,10 @@ namespace FuzzyByte.NokiaCooker
         private void btnUnlockRofs_Click(object sender, EventArgs e)
         {
             if (fwFile.FwType != TFwType.CORE)
+            {
+                Notes.ShowInfo("Image is not Core image.");
                 return;
+            }
             TSectionArea sectArea = fwFile.GetSectionArea();
             List<TSectionInfo> rofsSections = sectArea.GetRofsSections();
 
@@ -2616,28 +2274,6 @@ namespace FuzzyByte.NokiaCooker
             GUI_ListView_EnterFolderOrLaunchFile();
         }
 
-        private void gridFiles1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
-        {
-            switch (e.KeyValue)
-            {
-                case 0x2E:  // Cancel
-                    btnDelete.PerformClick();
-                    break;
-                case 0x0D:  // Enter
-                    GUI_ListView_EnterFolderOrLaunchFile();
-                    break;
-                case 0x08:  // BackSpace
-                    if (treeViewAdv1.SelectedNode == null)
-                        return;
-                    if (treeViewAdv1.SelectedNode.Parent == null)
-                        return;
-                    treeViewAdv1.SelectedNode = treeViewAdv1.SelectedNode.Parent;
-                    break;
-                default:
-                    break;
-            }
-        }
-
         private void gridFiles1_DragEnter(object sender, DragEventArgs e)
         {
             Debug.WriteLine("List DragEnter");
@@ -2693,24 +2329,10 @@ namespace FuzzyByte.NokiaCooker
             {
                 System.IO.Directory.Delete(TrashFiles, true);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 
             }
-        }
-
-        private void bwDeleteTrashFolder_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-
-        }
-
-        private void bwDeleteTrashFolder_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-        }
-
-        private void removeFilesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            btnDelete.PerformClick();
         }
 
         private void exploreToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2736,11 +2358,6 @@ namespace FuzzyByte.NokiaCooker
             gridFiles1.Focus();
         }
 
-        private void toolStripMenuItem1_Click_1(object sender, EventArgs e)
-        {
-            treeViewAdv1.Focus();
-            btnDelete.PerformClick();
-        }
 
         private void toolStripMenuItem2_Click(object sender, EventArgs e)
         {
@@ -2986,6 +2603,11 @@ namespace FuzzyByte.NokiaCooker
                     GUI_OpenFirmwareFile(iFileArg);
                 }
             
+        }
+
+        private void toolStripMenuItem3_Click_1(object sender, EventArgs e)
+        {
+            GUI_CloseFwFile();
         }
     }
 

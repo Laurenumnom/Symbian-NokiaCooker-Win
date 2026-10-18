@@ -71,14 +71,9 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\FuzzyByte\FuzzyByte.IO\FuzzyByte.IO.csproj">
-      <Project>{5FDA3655-0BDB-4A1D-95DC-9510529E3CD6}</Project>
-      <Name>FuzzyByte.IO</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\FuzzyByte\FuzzyByte.Utils\FuzzyByte.Utils.csproj">
-      <Project>{BBCA8CA4-7591-4854-A7D2-0E1937FC365C}</Project>
-      <Name>FuzzyByte.Utils</Name>
-    </ProjectReference>
+    <Content Include="rofsbuild.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

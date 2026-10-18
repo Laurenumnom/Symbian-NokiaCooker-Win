@@ -74,10 +74,6 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NAppUpdate.Framework, Version=0.1.0.0, Culture=neutral, PublicKeyToken=d1f1d1f19f9e5a56, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\NAppUpdate-master\src\NAppUpdate.Framework\bin\Release\NAppUpdate.Framework.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
@@ -105,8 +101,8 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="RepartitionDialog.resx">
       <DependentUpon>RepartitionDialog.cs</DependentUpon>
@@ -114,16 +110,16 @@
     <EmbeddedResource Include="UnlockRofsDialog.resx">
       <DependentUpon>UnlockRofsDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -143,22 +139,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\FuzzyByte\FuzzyByte.Forms\FuzzyByte.Forms.csproj">
-      <Project>{B46CC932-3654-4604-9A9C-D5D75A466ACD}</Project>
-      <Name>FuzzyByte.Forms</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\FuzzyByte\FuzzyByte.IO\FuzzyByte.IO.csproj">
-      <Project>{5FDA3655-0BDB-4A1D-95DC-9510529E3CD6}</Project>
-      <Name>FuzzyByte.IO</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\FuzzyByte\FuzzyByte.OS\FuzzyByte.OS.csproj">
-      <Project>{7EC509CF-1CFE-40D3-8C77-C4066C3A952A}</Project>
-      <Name>FuzzyByte.OS</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\FuzzyByte\FuzzyByte.Utils\FuzzyByte.Utils.csproj">
-      <Project>{BBCA8CA4-7591-4854-A7D2-0E1937FC365C}</Project>
-      <Name>FuzzyByte.Utils</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Firmware\Firmware.csproj">
       <Project>{6B37EF86-F2B2-4A76-80FA-2B6DE5B30C20}</Project>
       <Name>Firmware</Name>
@@ -170,13 +150,12 @@
     <None Include="Resources\Unlock.png" />
     <Content Include="Updates\NokiaCooker_feed_update.xml" />
     <Content Include="Resources\add.gif" />
-    <None Include="Resources\Donate32.png" />
     <None Include="Resources\Donate16.png" />
     <Content Include="Resources\Folder open.png" />
     <Content Include="Resources\leftright.png" />
     <Content Include="Resources\LR.png" />
     <Content Include="Resources\minus.gif" />
-    <None Include="Resources\resizeRofs.png" />
+    <Content Include="Resources\resizeRofs.png" />
     <Content Include="Resources\partitions.png" />
     <None Include="Resources\partitions1.png" />
     <Content Include="Resources\Save File.png" />
