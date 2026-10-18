@@ -6,10 +6,8 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
-using FuzzyByte.Utils;
 using Firmware;
 using System.Diagnostics;
-using FuzzyByte.Forms;
 using System.IO;
 
 
@@ -24,6 +22,7 @@ namespace FuzzyByte.NokiaCooker
         private bool altPressed = false;
         private string vplFile = "";
 
+        public delegate void LogHandler(string str, EventType etype);
         public event LogHandler Log;
 /*        {
             add { fwFile.Log += value; }
@@ -127,7 +126,7 @@ namespace FuzzyByte.NokiaCooker
 
             if (newVal.uda - oriSizes.uda != 0)
             {
-                if (Notes.ShowQuery("UDA will be erased, all UDA content will be lost.\nProceed?", MessageBoxButtons.OKCancel) != DialogResult.OK)
+                if (DialogResult.Cancel == MessageBox.Show("UDA will be erased, all UDA content will be lost.?", "proceed?", MessageBoxButtons.OKCancel))
                     return;
             }
 
@@ -201,7 +200,7 @@ namespace FuzzyByte.NokiaCooker
                     continue;
 
                 coreFile = new FwFile();
-                coreFile.Log += Log;
+                //coreFile.Log += Log;
                 coreFile.Open(path + entry.filename, true);
                 coreFile.Read();
             }
@@ -251,7 +250,7 @@ namespace FuzzyByte.NokiaCooker
                     continue;
 
                 FwFile fwFile = new FwFile();
-                fwFile.Log += Log;
+                //fwFile.Log += Log;
                 fwFile.Open(path + entry.filename);
                 fwFile.Read();
 
@@ -397,14 +396,7 @@ namespace FuzzyByte.NokiaCooker
         {
             if (e.Error != null)
             {
-                if (e.Error is FuzzyByteException)
-                {
-                    Notes.ShowWarning(e.Error.Message);
-                }
-                else
-                {
-                    Notes.ShowError("Unexpected Error", e.Error.Message);
-                }
+                Notes.ShowError("Unexpected Error", e.Error.Message);
                 DialogResult = DialogResult.Cancel;
                 Close();
                 return;
@@ -570,7 +562,7 @@ namespace FuzzyByte.NokiaCooker
                 fwFiles[0].ExtractAlignedCodeToFile(fatImageFilename);
 
                 Fat16Image fat = new Fat16Image();
-                fat.Log += this.Log;
+                //fat.Log += this.Log;
                 try
                 {
                     fat.OpenImage(fatImageFilename);
@@ -619,14 +611,7 @@ namespace FuzzyByte.NokiaCooker
         {
             if (e.Error != null)
             {
-                if (e.Error is FuzzyByteException)
-                {
-                    Notes.ShowWarning(e.Error.Message);
-                }
-                else
-                {
-                    Notes.ShowError("Unexpected Error", e.Error.Message);
-                }
+                Notes.ShowError("Unexpected Error", e.Error.Message);
                 DialogResult = DialogResult.Cancel;
                 Close();
                 return;

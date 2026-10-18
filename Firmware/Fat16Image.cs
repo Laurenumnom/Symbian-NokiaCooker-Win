@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using FuzzyByte.Utils;
-using FuzzyByte.IO;
 
 
 namespace Firmware
@@ -83,7 +81,7 @@ namespace Firmware
         private Entry FindFileOrDir(string fullDest, ref Entry parentEntry)
         {
             parentEntry = null;
-            string[] destDirs = Dirs.SplitPath(fullDest);
+            string[] destDirs = Utils.SplitPath(fullDest);
             if (destDirs.Length == 0)
             {
                 // Root Folder

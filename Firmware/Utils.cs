@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 
-
 namespace Firmware
 {
     public class Utils
@@ -50,6 +49,74 @@ namespace Firmware
                 else
                     res += "_";
             return res;
+        }
+    }
+
+    public class BytesUtils
+    {
+
+        public static string ToString(byte[] b)
+        {
+            return Encoding.ASCII.GetString(b);
+        }
+
+        public static string ToHex(byte b)
+        {
+            return b.ToString("X2");
+        }
+        public static string ToHex(ushort b)
+        {
+            return b.ToString("X4");
+        }
+        public static string ToHex(uint b)
+        {
+            return b.ToString("X8");
+        }
+        public static string ToHex(byte[] b)
+        {
+            string str = "";
+            for (int i = 0; i < b.Length; i++)
+            {
+                str += b[i].ToString("X2");
+            }
+            return str;
+        }
+
+        public static UInt32 BuildInt(byte b1, byte b2, byte b3, byte b4)
+        {
+            byte[] b = {b1, b2, b3, b4 };
+            return BitConverter.ToUInt32(b, 0);
+        }
+
+        public static ushort Hi(uint b)
+        {
+            return (ushort)(b);
+        }
+        public static ushort Lo(uint b)
+        {
+            return (ushort)(b >> 16);
+        }
+        public static UInt32 SwapBytes(UInt32 i)
+        {
+            byte[] b = BitConverter.GetBytes(i);
+            byte[] c = { b[3], b[2], b[1], b[0] };
+            return BitConverter.ToUInt32(c, 0);
+        }
+        public static UInt16 SwapBytes(UInt16 i)
+        {
+            byte[] b = { (byte)(i >> 8), (byte)(i >> 0) };
+            return BitConverter.ToUInt16(b, 0);
+        }
+
+        public static string GetSizeDescr(params object[] args)
+        {
+            return "NOT IMPLEMENTED";
+        }
+
+        public static UInt32 Round(UInt32 num, int reso)
+        {
+            UInt32 mod = num & (UInt32)reso;
+            return num+(UInt32)reso-mod;
         }
     }
 }

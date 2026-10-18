@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using FuzzyByte.Utils;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Diagnostics;
 
@@ -304,7 +303,7 @@ namespace Firmware
                     continue;
                 TBlock descrBlock = aGroup.certBlocks[0];
                 TBlockHeader27_ROFS_Hash blockHead = descrBlock.blockHeader as TBlockHeader27_ROFS_Hash;
-                //Debug.WriteLine("DESCR:" + blockHead.description.Replace("\0", ""));
+                Debug.WriteLine("DESCR:" + blockHead.description.Replace("\0", ""));
                 if (blockHead.description.ToLower().Contains(descr))
                 {
                     res = aGroup;

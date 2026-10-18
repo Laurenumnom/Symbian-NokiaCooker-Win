@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using FuzzyByte.Utils;
 
 
 namespace Firmware
@@ -128,7 +127,7 @@ namespace Firmware
             : base(TTLVType.UnknEA)
         {
             _offset = (UInt32)br.BaseStream.Position;
-            // Si, sembra corretto perche' RM-504_32.0.007_prd.core.c00 riporta una length congruente           
+            // Yes, that seems correct, because RM-504_32.0.007_prd.core.c00 has a consistent length.
             length = BytesUtils.SwapBytes(br.ReadUInt16());
             value = br.ReadBytes(length);
         }
@@ -136,7 +135,7 @@ namespace Firmware
         {
             UInt16 newLen = BytesUtils.SwapBytes((UInt16)length);
             bw.Write((byte)type);
-            bw.Write(newLen);   // TODO: Verifica se l'ordine dei byte e' corretto.
+            bw.Write(newLen);   // TODO: check byte order.
             bw.Write(value);
         }
     }
@@ -166,8 +165,8 @@ namespace Firmware
             : base(TTLVType.UnknF3_Imp)
         {
             _offset = (UInt32)br.BaseStream.Position;
-            // Si, sembra corretto perche' RM-504_32.0.007_prd.core.c00 riporta una length congruente           
-            length = BytesUtils.SwapBytes(br.ReadUInt16());  
+            // Si, sembra corretto perche' RM-504_32.0.007_prd.core.c00 riporta una length congruente
+            length = (int)BytesUtils.SwapBytes(br.ReadUInt16());  
             value = br.ReadBytes(length);
         }
         public override void Write(BinaryWriter bw)
@@ -303,7 +302,7 @@ namespace Firmware
             : base(TTLVType.DateTime, br)
         {
             // Convert Unix TimeStamp to .NET
-            UInt32 intVal = BytesUtils.BuildInt(value[0], value[1], value[2], value[3]);
+            UInt32 intVal = BytesUtils.BuildInt(value[3], value[2], value[1], value[0]);
             datetime = new DateTime(1970, 1, 1, 0, 0, 0, 0);
             datetime = datetime.AddSeconds(intVal);
         }
@@ -745,7 +744,7 @@ namespace Firmware
 
 #if DEBUG
         // We override only in release builds, so SmartAssembly will obfuscate the code.
-        public override string ToString()
+        public  string ToString()
         {
             string attr_s = "";
             switch (attr)

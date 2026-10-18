@@ -8,7 +8,6 @@ using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using Firmware;
 using System.Runtime.InteropServices;
-using FuzzyByte.Utils;
 
 
 namespace FuzzyByte.NokiaCooker

@@ -48,10 +48,10 @@
     <Compile Include="BlocksCollection.cs" />
     <Compile Include="Content_PaSubToc.cs" />
     <Compile Include="Content_Sha1.cs" />
-    <Compile Include="CRCException.cs" />
     <Compile Include="FileOperationWrapper.cs" />
     <Compile Include="FwLenException.cs" />
     <Compile Include="Header.cs" />
+    <Compile Include="Logged.cs" />
     <Compile Include="RofsException.cs" />
     <Compile Include="Fat16Image.cs" />
     <Compile Include="Fat16Exception.cs" />

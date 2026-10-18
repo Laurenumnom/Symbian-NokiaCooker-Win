@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.37627.13
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Firmware", "Firmware\Firmware.csproj", "{6B37EF86-F2B2-4A76-80FA-2B6DE5B30C20}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPlugins", "TestPlugins\TestPlugins.csproj", "{E49443DF-9979-4DF7-AA3C-4AAD45AB9BA9}"
@@ -78,5 +80,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {04B83AAF-15E8-4A0D-BDB5-B41ACBA72F0B}
 	EndGlobalSection
 EndGlobal

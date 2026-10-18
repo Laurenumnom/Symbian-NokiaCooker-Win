@@ -96,6 +96,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Notes.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
@@ -166,11 +167,6 @@
   <ItemGroup>
     <None Include="Properties\app.manifest" />
     <None Include="Resources\add-remove2.gif" />
-    <Content Include="INFO.txt" />
-    <Content Include="Log1.txt" />
-    <Content Include="Log2.txt" />
-    <Content Include="Log3.txt" />
-    <Content Include="Log4.txt" />
     <None Include="Resources\Unlock.png" />
     <Content Include="Updates\NokiaCooker_feed_update.xml" />
     <Content Include="Resources\add.gif" />
@@ -194,8 +190,6 @@
     <Content Include="Resources\Symbol-Delete.png" />
     <None Include="Resources\treeview_Expand.png" />
     <Content Include="Resources\Windows Explorer.png" />
-    <Content Include="Tmp.txt" />
-    <Content Include="TODO.txt" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

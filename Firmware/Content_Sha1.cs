@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
-using FuzzyByte.Utils;
 
 
 namespace Firmware
@@ -86,7 +85,9 @@ namespace Firmware
             string descr2 = BytesUtils.ToString(unknDescr2);
             descr2 = descr2.Replace("\0", "");
 
-            return " maybe_Counter:" + maybe_Counter + Environment.NewLine + " Descr1:" + descr1 + Environment.NewLine + " Descr2:" + descr2 + Environment.NewLine + " Unkn1:" + BytesUtils.ToHex(unkn1) + Environment.NewLine + " Sha1:" + BytesUtils.ToHex(hash20_sha1_on_data) + Environment.NewLine + " Unkn2:" + BytesUtils.ToHex(unkn2) + Environment.NewLine + " maybe_signature:" + BytesUtils.ToHex(maybe_signature_rsa_sha1) + Environment.NewLine + " Length2:" + BytesUtils.ToHex(length2) + Environment.NewLine + " Length3:" + BytesUtils.ToHex(length3) + Environment.NewLine + " StartOffs:" + BytesUtils.ToHex(startSha1Offset) + Environment.NewLine + " EndOffs:" + BytesUtils.ToHex(endSha1Offset);
+            return "TODO: IMPLEMENT firmware.Content_Sha1.ToString";
+
+            // return " maybe_Counter:" + maybe_Counter + Environment.NewLine + " Descr1:" + descr1 + Environment.NewLine + " Descr2:" + descr2 + Environment.NewLine + " Unkn1:" + BytesUtils.ToHex(unkn1) + Environment.NewLine + " Sha1:" + BytesUtils.ToHex(hash20_sha1_on_data) + Environment.NewLine + " Unkn2:" + BytesUtils.ToHex(unkn2) + Environment.NewLine + " maybe_signature:" + BytesUtils.ToHex(maybe_signature_rsa_sha1) + Environment.NewLine + " Length2:" + BytesUtils.ToHex(length2) + Environment.NewLine + " Length3:" + BytesUtils.ToHex(length3) + Environment.NewLine + " StartOffs:" + BytesUtils.ToHex(startSha1Offset) + Environment.NewLine + " EndOffs:" + BytesUtils.ToHex(endSha1Offset);
             //            return "Length:" + BytesUtils.ToHex(length) + " Sha1:" + BytesUtils.ToHex(hash20_sha1) + Environment.NewLine +
             //               " Len2:" + BytesUtils.ToHex(length2) + " Len3:" + BytesUtils.ToHex(length3) + " unkn4:" + descr + " = " + BytesUtils.ToHex(unkn4) + Environment.NewLine +
             //               " Sign:" + BytesUtils.ToHex(maybe_signature_rsa_sha1);

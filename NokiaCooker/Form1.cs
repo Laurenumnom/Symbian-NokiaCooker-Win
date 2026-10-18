@@ -14,9 +14,6 @@ using System.Windows.Forms;
 using Firmware;
 using System.IO;
 using System.Diagnostics;
-using FuzzyByte.OS;
-using FuzzyByte.Forms;
-using FuzzyByte.IO;
 
 using System.Security;
 using System.Security.Policy;
@@ -26,10 +23,6 @@ using System.Reflection;
 using System.Xml;
 using System.Runtime.InteropServices;
 using System.Threading;
-using FuzzyByte.Utils;
-using NAppUpdate.Framework;
-using NAppUpdate.Framework.Sources;
-using NAppUpdate.Framework.Common;
 using FuzzyByte.NokiaCooker.Properties;
 //using System.IO.Pipes;
 
@@ -38,16 +31,18 @@ using FuzzyByte.NokiaCooker.Properties;
 namespace FuzzyByte.NokiaCooker
 {
 
+    public enum EventType { Error, Warning, Debug, Info }
     public partial class Form1 : Form
     {
+
 //        private NamedPipeServerStream serverPipe;
 
         private List<FileElem> allFiles = new List<FileElem>();
-        private RecentList recent;
+        //private RecentList recent;
         private Process plugin = null;
-        private AppIcons imgListTreeView = new AppIcons();    // Evita il flickering della TreeView ogni volta che viene aggiunta una immagine.
-        private AppIcons imgListFileView = new AppIcons();
-        private AppIcons imgListPlugins = new AppIcons();
+        //private AppIcons imgListTreeView = new AppIcons();    // Evita il flickering della TreeView ogni volta che viene aggiunta una immagine.
+        //private AppIcons imgListFileView = new AppIcons();
+        //private AppIcons imgListPlugins = new AppIcons();
         private FwFile fwFile = null;
         private string TmpImages = "Images";
         private string TmpFiles = "Files";
@@ -75,6 +70,8 @@ namespace FuzzyByte.NokiaCooker
         private bool iNeedsRecomputeSize = false;
         private ToolStripButton tsBtnCancel = null;
         private string iFileArg="";
+
+        private string[] recent = new string[] { };
 
 
         #region Check User Credentials
@@ -152,19 +149,9 @@ namespace FuzzyByte.NokiaCooker
             DirBytesUtils.CreateNew(TmpImages, true);    Non va bene perche' cancella la dir esistente e la ricrea (cancella rofsbuild.exe)
             DirBytesUtils.CreateNew(PluginsPath, true);*/
 
-            imgListTreeView.SmallIconsImageList.Images.Add(NokiaCooker.Properties.Resources.cellphone);
-            imgListTreeView.LargeIconsImageList.Images.Add(NokiaCooker.Properties.Resources.cellphone);
-            imgListTreeView.GetIconIndex(Environment.SystemDirectory);
-            imgListTreeView.GetIconIndex(Environment.SystemDirectory, 2);
-
-            treeViewAdv1.ImageList = imgListTreeView.SmallIconsImageList;
-
-            textAreaAdv1.LinkClicked += new LinkClickedEventHandler(textAreaAdv1_LinkClicked);
-
-            gridFiles1.SetImageList(imgListFileView);
+            //gridFiles1.SetImageList(imgListFileView);
 
             fwFile = new FwFile();
-            fwFile.Log += new LogHandler(fwFile_Log);
             
 #if !DEBUG
             button3.Visible = false;
@@ -280,22 +267,7 @@ namespace FuzzyByte.NokiaCooker
 
         private void GUI_PopulateFileListFromPath(string path)
         {
-            Cursor.Current = Cursors.WaitCursor;
-            FolderContents cont = new FolderContents(0, 0, 0);
-            FileSystemInfo[] infos = Dirs.GetFileSystemInfo(path, cont);
-            lblFolders.Text = "";
-            if (cont.iFolders > 0)
-                lblFolders.Text = "Folders: " + cont.iFolders;
 
-            lblFiles.Text = "";
-            lblSize.Text = "";
-            if (cont.iFiles > 0)
-            {
-                lblFiles.Text += "Files: " + cont.iFiles;
-                lblSize.Text += "Size: " + BytesUtils.GetSizeDescr(cont.iSize);
-            }
-            gridFiles1.PopulateFileList(infos); // TODO: Async...
-            Cursor.Current = Cursors.Default;
         }
 
         // flag run in sandbox
@@ -323,7 +295,6 @@ namespace FuzzyByte.NokiaCooker
             }
     
             ToolStripButton button = new ToolStripButton();
-            button.ImageIndex = imgListPlugins.GetIconIndex(exeFile);
             button.Text = Path.GetFileNameWithoutExtension(exeFile);
             button.ToolTipText = tooltip;
             button.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
@@ -346,8 +317,6 @@ namespace FuzzyByte.NokiaCooker
             toolStripMenuItem1.Text = button.Text;
             toolStripMenuItem1.ImageIndex = button.ImageIndex;
             toolStripMenuItem1.Click += new EventHandler(toolStripMenuItem1_Click);
-//            removePluginsToolStripMenuItem.DropDown.ImageList = imgListPlugins.SmallIconsImageList;
-            removePluginsToolStripMenuItem.DropDown.ImageList = imgListPlugins.LargeIconsImageList;
             removePluginsToolStripMenuItem.DropDownItems.Add(toolStripMenuItem1);
             return true;
         }
@@ -559,7 +528,7 @@ namespace FuzzyByte.NokiaCooker
         private void GUI_UpdateRecentList()
         {
             recentFilesToolStripMenuItem.DropDownItems.Clear();
-            foreach (string recentFile in recent.GetRecentList())
+            foreach (string recentFile in recent )
             {
                 ToolStripMenuItem recentItem = new System.Windows.Forms.ToolStripMenuItem();
                 recentItem.Text = recentFile;
@@ -622,9 +591,6 @@ namespace FuzzyByte.NokiaCooker
             statusStrip2.Items.Insert(6, tsBtnRefresh);
 #endif
 
-            //toolStrip2.ImageList = imgListPlugins.SmallIconsImageList;
-            toolPlugins.ImageList = imgListPlugins.LargeIconsImageList;
-
             if (NokiaCooker.Properties.Settings.Default.InitializePlugins)
             {
                 ScanForIntegratedPlugins(PluginsPath);
@@ -639,65 +605,7 @@ namespace FuzzyByte.NokiaCooker
             showTextToolStripMenuItem.Checked = Properties.Settings.Default.ToolBar_Text;
             showLargeIconsToolStripMenuItem.Checked = Properties.Settings.Default.ToolBar_Big;
 
-            //LaunchBrowser("www.symbian-toys.com/nokiacooker.aspx");
-            UpdateManager updManager = UpdateManager.Instance;
-            updManager.UpdateSource = new NAppUpdate.Framework.Sources.SimpleWebSource();
-            updManager.Config.TempFolder = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "NokiaCooker\\Updates");
-            updManager.ReinstateIfRestarted();
-            IUpdateSource feedSource = new SimpleWebSource("http://www.symbian-toys.com/updates/nokiacooker_feed_update.xml");
-            // Only check for updates if we haven't done so already
-            if (updManager.State != UpdateManager.UpdateProcessState.NotChecked)
-                return;
-            // throw new FuzzyByteException("Update process has already initialized; current state: " + updManager.State.ToString());
-            updManager.BeginCheckForUpdates(feedSource, OnCheckUpdatesCompleted, null);
         }
-
-        private void OnCheckUpdatesCompleted(IAsyncResult asyncResult)
-        {
-            try
-            {
-                ((UpdateProcessAsyncResult)asyncResult).EndInvoke();
-            }
-            catch (Exception ex)
-            {
-                // Notes.ShowWarning("Check updates failed. Check the feed and try again.");
-                return;
-            }
-
-            // Get a local pointer to the UpdateManager instance
-            UpdateManager updManager = UpdateManager.Instance;
-            if (updManager.UpdatesAvailable > 0)
-            {
-#if !DEBUG
-                updManager.BeginPrepareUpdates(OnPrepareUpdatesCompleted, null);
-                return;
-#endif
-            }
-        }
-
-        private void OnPrepareUpdatesCompleted(IAsyncResult asyncResult)
-        {
-            try
-            {
-                ((UpdateProcessAsyncResult)asyncResult).EndInvoke();
-            }
-            catch (Exception ex)
-            {
-                // Notes.ShowWarning("Updates preperation failed. Check the feed and try again.");
-                return;
-            }
-
-            // Get a local pointer to the UpdateManager instance
-            UpdateManager updManager = UpdateManager.Instance;
-            Notes.ShowInfo("NokiaCooker will be closed and updated to the latest version\n"+
-                    "If you experience any issues during the automatic update, try to launch NokiaCooker as Administrator,\notherwise, you can download manually latest version from the official website.");
-#if DEBUG
-            updManager.ApplyUpdates(true, true, true);
-#else
-            updManager.ApplyUpdates(true, false, false);
-#endif
-        }
-
 
         void textAreaAdv1_LinkClicked(object sender, LinkClickedEventArgs e)
         {
@@ -830,7 +738,6 @@ namespace FuzzyByte.NokiaCooker
                 GUI.ShowWarning("Data exceeds the PartitionSize, can't repack.\nPlease remove "+ BytesUtils.GetSizeDescr(iEstimatedSize- fwFile.PartitionSize));
                 return;
             }*/
-            textAreaAdv1.DetectUrls = false;
 #if USE_BACKGOUND_WORKER
             if (!bwRepack.IsBusy)
                 bwRepack.RunWorkerAsync();
@@ -915,10 +822,9 @@ namespace FuzzyByte.NokiaCooker
         {
             if (!File.Exists(fname))
                 return false;
-            recent.UpdateRecentFiles(fname);
+            //recent.UpdateRecentFiles(fname);
             fwFile.Close();
             iNeedsRebuild = false;
-            textAreaAdv1.DetectUrls = false;
 
             removeOldFwFiles();
 #if USE_BACKGOUND_WORKER
@@ -932,7 +838,6 @@ namespace FuzzyByte.NokiaCooker
 #endif
             return true;
         }
-
 
         private void fwFile_Log(string message, EventType type)
         {
@@ -961,8 +866,8 @@ namespace FuzzyByte.NokiaCooker
                 default:
                     break;
             }
-            textAreaAdv1.Write(descr + message);
-            textAreaAdv1.ScrollToEnd();
+            textAreaAdv1.Text += descr + message + "\n";
+            textAreaAdv1.ScrollToCaret();
 #if !USE_BACKGOUND_WORKER
             Application.DoEvents();
 #endif
@@ -973,7 +878,7 @@ namespace FuzzyByte.NokiaCooker
         {
             if (GUI_FwChanged)
             {
-                if (Notes.ShowQuery("Firmware has not been saved, discard changes and close the firmware?", MessageBoxButtons.YesNo) != DialogResult.Yes)
+                if (DialogResult.Yes != MessageBox.Show("Firmware has not been saved, discard changes and close the firmware?", "Proceed?", MessageBoxButtons.YesNo))
                     return false;
             }
 
@@ -983,7 +888,6 @@ namespace FuzzyByte.NokiaCooker
             Cursor = Cursors.Default;
             GUI_SetAllEnabled(true);
             GUI_SetToolbarEnabled(false);
-            treeViewAdv1.MonitorFileSystem = false;
             treeViewAdv1.Nodes.Clear();
             gridFiles1.Clear();
             iNeedsRebuild = false;
@@ -1016,9 +920,15 @@ namespace FuzzyByte.NokiaCooker
             fwFile_Log("Remove old fw Files. Please wait...\t", EventType.Info);
 
             // Dirs.DeleteContent(TrashFiles); // nel peggiore dei casi impiega quanto impiegava prima
-            string newDir = Dirs.CreateNewDir(TrashFiles + "Tmp");
-            Dirs.MoveContent(TmpFiles, newDir); // Move TmpFiles to trashfiles
-            Dirs.DeleteContent(TmpFiles);   // nel caso in cui qualche file non sia stato spostato per qualche motivo
+            string newDir = TrashFiles + "Tmp";
+            //System.IO.Directory.Move(TmpFiles, newDir); // Move TmpFiles to trashfiles
+            try
+            {
+                System.IO.Directory.Delete(TmpFiles, true);   // nel caso in cui qualche file non sia stato spostato per qualche motivo
+            } catch (Exception ex)
+            {
+                fwFile_Log("!!! File deletion error!", EventType.Warning);
+            }
             if (!bwDeleteTrashFolder.IsBusy)
                 bwDeleteTrashFolder.RunWorkerAsync();
 
@@ -1036,7 +946,6 @@ namespace FuzzyByte.NokiaCooker
             string fullFilename = e.Argument as string;
             fileSystemWatcher1.EnableRaisingEvents = false;
             iEstimatedSize = 0;
-            treeViewAdv1.MonitorFileSystem = false;
             bwOpenFile.ReportProgress(-1);
             fwFile.Open(fullFilename);
             fwFile.Read();
@@ -1065,7 +974,7 @@ namespace FuzzyByte.NokiaCooker
                     newFile += UNKN_IMG;
                     break;
             }
-            iImageFile.Log += new LogHandler(fwFile_Log);
+            //iImageFile.Log += new LogHandler(fwFile_Log);
 
             if (!checkBox1.Checked)
             {
@@ -1122,7 +1031,7 @@ namespace FuzzyByte.NokiaCooker
                     fullList.Sort();
                     treeViewAdv1.Nodes.Clear();
                     // string[] dirList = Directory.GetDirectories(path, "*.*", SearchOption.AllDirectories);
-                    treeViewAdv1.BuildTreeView(Path.GetFileName(fwFile.filename), TmpFiles, fullList.ToArray());
+                    //treeViewAdv1.BuildTreeView(Path.GetFileName(fwFile.filename), TmpFiles, fullList.ToArray());
                     treeViewAdv1.Enabled = true;
                     //                treeViewAdv1.Update();          /**/
                     gridFiles1.Enabled = true;
@@ -1130,7 +1039,7 @@ namespace FuzzyByte.NokiaCooker
                 }
                 return;
             }
-            catch (FuzzyByteException ex)
+            catch (Exception ex)
             {
                 Notes.ShowWarning(ex.Message);
             }
@@ -1143,14 +1052,7 @@ namespace FuzzyByte.NokiaCooker
             treeViewAdv1.AllowDrop = true;
             if (e.Error != null)
             {
-                if (e.Error is FuzzyByteException)
-                {
-                    Notes.ShowWarning(e.Error.Message);
-                }
-                else
-                {
-                    Notes.ShowError("Unexpected Error", e.Error.Message);
-                }
+                Notes.ShowError("Unexpected Error", e.Error.Message);
                 GUI_CloseFwFile();
                 return;
             }
@@ -1161,13 +1063,13 @@ namespace FuzzyByte.NokiaCooker
             //GUI_SetComputedLabel(iEstimatedSize, fwFile.PartitionSize, false);
             //lblPartSize.Text = "Partition Size: " + BytesUtils.GetSizeDescr(fwFile.PartitionSize);
 
-            string selPath = treeViewAdv1.SelectedPath;
+            //string selPath = treeViewAdv1.SelectedNode.FullPath;
 
             // Rebuild Tree
             treeViewAdv1.Nodes.Clear();
-            treeViewAdv1.BuildTreeView(Path.GetFileName(fwFile.filename), TmpFiles);
-            treeViewAdv1.SelectedPath = selPath;
-            treeViewAdv1.MonitorFileSystem = true;
+            //treeViewAdv1.BuildTreeView(Path.GetFileName(fwFile.filename), TmpFiles);
+            //treeViewAdv1.SelectedNode.FullPath = selPath;
+            //treeViewAdv1.MonitorFileSystem = true;
             //treeViewAdv1.Update();
 
             if (!bwComputeSize.IsBusy && !checkBox1.Checked)
@@ -1240,7 +1142,7 @@ namespace FuzzyByte.NokiaCooker
             if (!iNeedsRebuild)
                 imageFile = new NullImage();
 
-            imageFile.Log += new LogHandler(fwFile_Log);
+            //imageFile.Log += new LogHandler(fwFile_Log);
 
             string dirName = Path.GetDirectoryName(fullFilename) + Path.DirectorySeparatorChar;
             string fname = Path.GetFileNameWithoutExtension(fullFilename);
@@ -1274,7 +1176,7 @@ namespace FuzzyByte.NokiaCooker
                     GUI_SetAllEnabled(false);
                 }
             }
-            catch (FuzzyByteException ex)
+            catch (Exception ex)
             {
                 Notes.ShowWarning(ex.Message);
             }
@@ -1284,14 +1186,7 @@ namespace FuzzyByte.NokiaCooker
         {
             if (e.Error != null)
             {
-                if (e.Error is FuzzyByteException)
-                {
-                    Notes.ShowWarning(e.Error.Message);
-                }
-                else
-                {
-                    Notes.ShowError("Unexpected Error", e.Error.Message);
-                }
+                Notes.ShowError("Unexpected Error", e.Error.Message);
             }
             else
             {
@@ -1301,16 +1196,6 @@ namespace FuzzyByte.NokiaCooker
             fileSystemWatcher1.EnableRaisingEvents = true;
             GUI_SetAllEnabled(true);
             GUI_SetToolbarEnabled(true);
-            //            fwFile_Log("ALL DONE! *** Firmware repacked: " + fwFile.filename + "\n", EventType.Info);
-            fwFile_Log("DONE!\n\n", EventType.Info);
-            fwFile_Log("******* 26/Nov/2011: Open message to Cookers: NokiaCooker needs YOU! *******\n", EventType.Info);
-            fwFile_Log("If you like NokiaCooker and want to help its development, it would be very nice if you'll add a short message like the one below, when you'll publish your CFW on forums, or on your blog:\n\n[quote] This CFW has been created with NokiaCooker. Consider donating for Free and High Quality softwares. http://www.symbian-toys.com/NokiaCooker.aspx [/quote]\n\nThat message will not cost you anything and you'll help a LOT the development of NokiaCooker! :)\n", EventType.Info);
-            fwFile_Log("\n******* 30/Oct/2012: Updated News and Concerns *******\nProbabily this will be the last NC release.\n\nAs everyone can see, end-users are not interested in supporting NokiaCooker.\nAbout a year ago, on 26/Nov/2011, I asked to you Cookers to include a short message in your CFW release, hoping it would help NokiaCooker.\n", EventType.Info);
-            fwFile_Log("During these days I looked at 20 CFW published recently and all of them were created with NokiaCooker\n", EventType.Info);
-            fwFile_Log("But, I noticed that only 10% of them included that \"support message\", while the 90% just ignored it.\nIf things will not change soon, NokiaCooker will be definitely suspended. No further warning messages will follow\n\nA lot of End-Users, Modders and you Cookers, are upset because Symbian is dying, day by day...\nBut, are you really doing all you can to keep it alive?\n", EventType.Info);
-            fwFile_Log("\nI did my part and you're supposed to do yours\nSo, let's hope those 10/90 will become soon 90/10 ;) Come on!\n", EventType.Info);
-            fwFile_Log("\nThank you for your understanding,\nMarco (aka Il.Socio)\n", EventType.Info);
-            textAreaAdv1.DetectUrls = true;
         }
         #endregion
 
@@ -1377,7 +1262,7 @@ namespace FuzzyByte.NokiaCooker
 
 
             string outPath = Path.GetDirectoryName(fwFile.filename) + Path.DirectorySeparatorChar + "SHA1" + Path.DirectorySeparatorChar;
-            Dirs.CreateNewDir(outPath, true);
+            System.IO.Directory.CreateDirectory(outPath);
             if (comp_sha1 != block_sha1)
             {
                 string fname = outPath + comp_sha1 + "_" + block_sha1 + ".no.bin";
@@ -1776,7 +1661,7 @@ namespace FuzzyByte.NokiaCooker
             return;
             RofsImage rofs1 = new RofsImage();
             RofsImage rofs2 = new RofsImage();
-            rofs1.Log += new LogHandler(fwFile_Log);
+            //rofs1.Log += new LogHandler(fwFile_Log);
             rofs1.OpenImage(@"C:\ProgettiInCorso\NokiaCooker\FwExplorer\bin\Debug\Images\rofs.rom");
             rofs1.Extract("c:\\test111\\");
             rofs1.CloseImage();
@@ -1966,7 +1851,7 @@ namespace FuzzyByte.NokiaCooker
         private void treeViewAdv1_AfterSelect(object sender, TreeViewEventArgs e)
         {
             //Debug.WriteLine("TreeView AfterSelect");
-            string path = treeViewAdv1.SelectedPath;
+            string path = treeViewAdv1.SelectedNode.FullPath;
             if (path.StartsWith("" + Path.DirectorySeparatorChar))
                 path = path.Substring(1);
 
@@ -1987,13 +1872,13 @@ namespace FuzzyByte.NokiaCooker
             string fullElemPath = GUI_FocusedFullListViewPath;
             if (Directory.Exists(fullElemPath))
             {
-                string elem = gridFiles1.GetNameFromRowIndex(gridFiles1.FocusedRowIndex);
-                treeViewAdv1.SelectedPath = treeViewAdv1.SelectedPath + elem;
-                // treeViewAdv1.SelectChildNode(elem);
+                string elem = gridFiles1.SelectedItems[0].Text;
+                //treeViewAdv1.SelectedNode.FullPath = treeViewAdv1.SelectedNode.FullPath + elem;
+                //treeViewAdv1.SelectChildNode(elem);
             }
             if (File.Exists(fullElemPath))
             {
-                ShellUtilities.Execute(fullElemPath);
+                Process.Start(fullElemPath);
             }
         }
 
@@ -2002,7 +1887,7 @@ namespace FuzzyByte.NokiaCooker
         {
             get
             {
-                string localFilePath = treeViewAdv1.SelectedPath;
+                string localFilePath = treeViewAdv1.SelectedNode.FullPath;
                 if (localFilePath.StartsWith("" + Path.DirectorySeparatorChar))
                     localFilePath = localFilePath.Substring(1);
                 string fullFilePath = TmpFiles + localFilePath;
@@ -2014,7 +1899,7 @@ namespace FuzzyByte.NokiaCooker
         {
             get
             {
-                string elem = gridFiles1.GetNameFromRowIndex(gridFiles1.FocusedRowIndex);
+                string elem = gridFiles1.SelectedItems[0].Text;
                 return GUI_FullTreeViewPath + elem;
             }
         }
@@ -2043,11 +1928,11 @@ namespace FuzzyByte.NokiaCooker
                 // Potrebbe essere stata selezionata piu' di una entry...
                 List<string> list = new List<string>();
                 string rootPath = GUI_FullTreeViewPath;
-                foreach (int aRowIndex in gridFiles1.SelectedIndicies)
+                foreach (int aRowIndex in gridFiles1.SelectedIndices)
                 {
                     if (aRowIndex < 0)
                         continue;
-                    string elemName = gridFiles1.GetNameFromRowIndex(aRowIndex);
+                    string elemName = gridFiles1.Items[aRowIndex].Text;
                     if (elemName == "")
                         continue;
                     list.Add(rootPath + elemName);
@@ -2111,16 +1996,16 @@ namespace FuzzyByte.NokiaCooker
                 File.Copy(srcFile, destFile, true);
                 fwFile.Repack(destFile);
                 // Unpack
-                Dirs.DeleteContent(TmpFiles);
+                System.IO.Directory.Delete(TmpFiles, true);
                 //Directory.Delete(TmpFiles, true);
                 //Directory.CreateDirectory(TmpFiles);
                 imageFile.OpenImage(destFile);
                 imageFile.Extract(TmpFiles);
                 imageFile.CloseImage();
             }
-            catch (FuzzyByteException ex)
+            catch (Exception ex)
             {
-                Notes.ShowWarning(ex.Message);
+                fwFile_Log("!!! File deletion error!", EventType.Warning);
             }
 
             GUI_SetAllEnabled(true);
@@ -2128,16 +2013,8 @@ namespace FuzzyByte.NokiaCooker
 
             // Build Tree
             treeViewAdv1.Nodes.Clear();
-            treeViewAdv1.BuildTreeView(Path.GetFileName(fwFile.filename), TmpFiles);
+            //treeViewAdv1.BuildTreeView(Path.GetFileName(fwFile.filename), TmpFiles);
 
-            fwFile_Log("ALL DONE! *** Firmware repacked: " + fwFile.filename, EventType.Info);
-            fwFile_Log("******* 26/Nov/2011: Open message to Cookers: NokiaCooker needs YOU! *******\n", EventType.Info);
-            fwFile_Log("If you like NokiaCooker and want to help its development, it would be very nice if you'll add a short message like the one below, when you'll publish your CFW on forums, or on your blog:\n\n[quote] This CFW has been created with NokiaCooker. Consider donating for Free and High Quality softwares. http://www.symbian-toys.com/NokiaCooker.aspx [/quote]\n\nThat message will not cost you anything and you'll help a LOT the development of NokiaCooker! :)\n", EventType.Info);
-            fwFile_Log("\n******* 30/Oct/2012: Updated News and Concerns *******\nProbabily this will be the last NC release.\n\nAs everyone can see, end-users are not interested in supporting NokiaCooker.\nAbout a year ago, on 26/Nov/2011, I asked to you Cookers to include a short message in your CFW release, hoping it would help NokiaCooker.\n", EventType.Info);
-            fwFile_Log("During these days I looked at 20 CFW published recently and all of them were created with NokiaCooker\n", EventType.Info);
-            fwFile_Log("But, I noticed that only 10% of them included that \"support message\", while the 90% just ignored it.\nIf things will not change soon, NokiaCooker will be definitely suspended. No further warning messages will follow\n\nA lot of End-Users, Modders and you Cookers, are upset because Symbian is dying, day by day...\nBut, are you really doing all you can to keep it alive?\n", EventType.Info);
-            fwFile_Log("\nI did my part and you're supposed to do yours\nSo, let's hope those 10/90 will become soon 90/10 ;) Come on!\n", EventType.Info);
-            textAreaAdv1.DetectUrls = true;
         }
 
         private void importFATIMAToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2388,7 +2265,7 @@ namespace FuzzyByte.NokiaCooker
                 //            UInt64 val = (UInt64)e.UserState;
                 //            GUI_SetComputedLabel(val, fwFile.PartitionSize, false);
             }
-            catch (FuzzyByteException ex)
+            catch (Exception ex)
             {
                 Notes.ShowWarning(ex.Message);
             }
@@ -2484,7 +2361,7 @@ namespace FuzzyByte.NokiaCooker
                 // Update Estimated Size
                 // GUI_SetComputedLabel(iEstimatedSize, fwFile.PartitionSize, false);
             }
-            catch (FuzzyByteException ex)
+            catch (Exception ex)
             {
                 Notes.ShowWarning(ex.Message);
             }
@@ -2577,18 +2454,10 @@ namespace FuzzyByte.NokiaCooker
             CancelBtnVisible = false;
             if (e.Error != null)
             {
-                if (e.Error is FuzzyByteException)
-                {
-                    Notes.ShowWarning(e.Error.Message);
-                }
-                else
-                {
-                    Notes.ShowError("Unexpected Error", e.Error.Message);
-                }
+                Notes.ShowError("Unexpected Error", e.Error.Message);
             }
 
             updateSizeLabelTimer.Stop();
-            treeViewAdv1.MonitorFileSystem = true;
             // TODO: dismiss copy / delete progress dialog.
 
             // use e.result to update iEstimatedSize and allfiles[]
@@ -2820,7 +2689,14 @@ namespace FuzzyByte.NokiaCooker
 
         private void bwDeleteTrashFolder_DoWork(object sender, DoWorkEventArgs e)
         {
-            Dirs.DeleteContent(TrashFiles, bwDeleteTrashFolder);
+            try
+            {
+                System.IO.Directory.Delete(TrashFiles, true);
+            }
+            catch (Exception ex)
+            {
+                
+            }
         }
 
         private void bwDeleteTrashFolder_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -2852,7 +2728,7 @@ namespace FuzzyByte.NokiaCooker
 
         private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            gridFiles1.SelectAll();
+            //gridFiles1.SelectAll();
         }
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
@@ -2896,11 +2772,6 @@ namespace FuzzyByte.NokiaCooker
                 size = new Size(32, 32);
             toolbar.ImageScalingSize = size;
             toolbar.Width = this.Width;
-            // Necessario perche' l'immagine non e' quadrata di 32x32, quindi non puo' scalare con ImageScalingSize
-            if (big)
-                btnDonate.Image = Properties.Resources.Donate32;
-            else
-                btnDonate.Image = Properties.Resources.Donate16;
         }
 
         private void GUI_ToolBarEnableText(bool enabled)
@@ -3046,7 +2917,7 @@ namespace FuzzyByte.NokiaCooker
 
             // SHIFT KEY is being held down
             RepartitionDialog dlg = new RepartitionDialog(TmpImages + FAT_IMG);
-            dlg.Log += new LogHandler(fwFile_Log);
+            //dlg.Log += new LogHandler(fwFile_Log);
             // Sposta Dialog
             dlg.StartPosition = FormStartPosition.Manual;
             Size oldSize = dlg.ClientSize;
@@ -3066,7 +2937,7 @@ namespace FuzzyByte.NokiaCooker
             GUI_SetAllEnabled(true);
             GUI_SetToolbarEnabled(false);
 
-            recent = new RecentList("Symbian-Toys", "NokiaCooker");
+            recent = new string[] { "Symbian-Toys", "NokiaCooker" };
             GUI_UpdateRecentList();
             GUI_ToolBarEnableText(Properties.Settings.Default.ToolBar_Text);
             GUI_ToolBarChangeSize(Properties.Settings.Default.ToolBar_Big);
@@ -3078,12 +2949,12 @@ namespace FuzzyByte.NokiaCooker
                 Application.Exit();
             }/**/
 
-            bool explorerRunAsAdmin = Processes.IsProcessOwnerAdmin("explorer");
-            if (IsUserAdministrator() && !explorerRunAsAdmin)
-            {
-                Notes.ShowInfo("NokiaCooker is running as Administrator:\nthe Drag&Drop will not work properly!\n\nYou should run NokiaCooker as regular user.");
-                //Application.Exit();
-            }
+            //bool explorerRunAsAdmin = Processes.IsProcessOwnerAdmin("explorer");
+            //if (IsUserAdministrator() && !explorerRunAsAdmin)
+            //{
+            //    Notes.ShowInfo("NokiaCooker is running as Administrator:\nthe Drag&Drop will not work properly!\n\nYou should run NokiaCooker as regular user.");
+            //    //Application.Exit();
+            //}
 
             ProcessNokiaCookerArgs();
         }
@@ -3101,7 +2972,7 @@ namespace FuzzyByte.NokiaCooker
                     if (!GUI_CloseFwFile())
                         return;
                     RepartitionDialog dlg = new RepartitionDialog(TmpImages + FAT_IMG, iFileArg);
-                    dlg.Log += new LogHandler(fwFile_Log);
+                    //dlg.Log += new LogHandler(fwFile_Log);
                     // Sposta Dialog
                     dlg.StartPosition = FormStartPosition.Manual;
                     Size oldSize = dlg.ClientSize;

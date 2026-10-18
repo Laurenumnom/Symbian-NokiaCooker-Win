@@ -8,7 +8,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.ComponentModel;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters;
-using FuzzyByte.Utils;
 using System.Collections;
 using System.Xml;
 
@@ -678,7 +677,7 @@ namespace Firmware
             string[] files = Directory.GetFiles(vplPath, "*.vpl");
             if (files.Length <= 0)
             {
-                throw new CRCException("*.vpl file not found in " + vplPath);
+                throw new Exception("*.vpl file not found in " + vplPath);
             }
             int i = 0;
             UInt32 crc = 0;
@@ -698,7 +697,7 @@ namespace Firmware
                     vplFiles += s;
                 }
                 string myFile = Path.GetFileName(filename.ToLower().Trim());
-                throw new CRCException("CRC for file: " + myFile + " Not found in: " + Environment.NewLine + vplFiles);
+                throw new Exception("CRC for file: " + myFile + " Not found in: " + Environment.NewLine + vplFiles);
             }
             return crc;
         }
@@ -717,7 +716,7 @@ namespace Firmware
                 FixCRCForWholeFile(vplCrc, header.offsetFixCrc);
                 LogEvent("CRC fixed using VPL file: 0x" + BytesUtils.ToHex(vplCrc) + "\n");
             }
-            catch (CRCException ex)
+            catch (Exception ex)
             {
                 FixCRCForWholeFile(_initCrc, header.offsetFixCrc);
                 LogEvent(ex.Message + Environment.NewLine + "CRC fixed using original value: 0x" + BytesUtils.ToHex(_initCrc) + "\n");
